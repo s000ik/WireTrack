@@ -1,0 +1,7 @@
+Timestamp,Tundish Temperature,Bar Temperature,Bath A Temperature,Bath B Temperature
+00:00,1500,600,200,220
+04:00,1520,620,210,225
+08:00,1510,615,205,222
+12:00,1530,630,215,230
+16:00,1540,640,220,235
+20:00,1550,650,225,240

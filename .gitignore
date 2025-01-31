@@ -1,0 +1,76 @@
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Ignore node modules and other dependencies
+node_modules/
+dist/
+build/
+out/
+
+# Ignore log files and temp files
+*.log
+*.temp
+*.tmp
+*.pid
+*.pid.lock
+
+# Ignore compiled files
+*.class
+*.pyc
+*.o
+*.out
+*.obj
+
+# Ignore virtual environments
+venv/
+env/
+
+# Ignore IDE and editor files
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# Ignore environment files
+.env
+.env.local
+.env.*.local
+
+# Ignore Python cache files
+__pycache__/
+
+# Ignore macOS system files
+.DS_Store
+
+# Ignore backup files
+*.bak
+*.swp
+
+# Ignore any output or generated files
+*.zip
+*.tar.gz
+*.rar
+
+# Ignore Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Ignore model training output
+runs/
+logs/
+checkpoints/
+
+# Ignore your dataset structure (specific to your use case)
+dataset/images/train/spoiled/
+dataset/images/train/fresh/
+labels/  # Adjust depending on where label files are stored
+
+# Ignore YOLOv8 output
+yolov8_output/
+
+# Ignore any custom files specific to your project
+custom_output/
+
+# Ignore models in ml_models/models/forward and ml_models/models/backward
+ml_models/models/
+my-app/

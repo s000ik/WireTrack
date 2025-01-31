@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "react-d3-speedometer": "^2.2.1",
+    "xlsx": "^0.18.5"
+  }
+}

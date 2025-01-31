@@ -1,0 +1,12 @@
+pandas
+numpy
+scikit-learn
+pathlib
+seaborn
+matplotlib
+flask
+keras
+tensorflow
+xgboost
+flask-cors
+apscheduler
