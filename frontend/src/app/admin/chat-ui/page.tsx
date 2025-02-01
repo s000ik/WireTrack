@@ -2,6 +2,7 @@
 /eslint-disable/
 
 import { useState } from 'react';
+import { useToast } from '@chakra-ui/react';
 import {
   Flex,
   Img,
@@ -15,6 +16,7 @@ import {
 import { MdPerson, MdAutoAwesome } from 'react-icons/md';
 
 export default function Chat() {
+  const toast = useToast();
   // Chat messages state
   const [messages, setMessages] = useState<
     { type: 'user' | 'bot'; text: string }[]
@@ -29,10 +31,22 @@ export default function Chat() {
     { color: 'gray.500' },
     { color: 'whiteAlpha.600' }
   );
-
+  const handleKeyDown = async (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleTranslate();
+    }
+  };
   const handleTranslate = async () => {
     if (!inputCode) {
-      alert('Please enter your message.');
+      toast({
+        title: "Empty message",
+        description: "Please enter your message.",
+        status: "warning",
+        duration: 3000,
+        isClosable: true,
+        position: "top-right"
+      });
       return;
     }
 
@@ -48,18 +62,22 @@ export default function Chat() {
         body: JSON.stringify({ question: inputCode }),
       });
 
-      if (!response.ok) {
-        throw new Error('Failed to fetch response from the server.');
-      }
+      if (!response.ok) throw new Error('Server offline');
 
       const data = await response.json();
       setMessages((prev) => [...prev, { type: 'bot', text: data.answer }]);
     } catch (error) {
-      console.error('Error:', error);
-      alert('An error occurred while communicating with the server.');
+      toast({
+        title: "Server Offline",
+        description: "The chatbot server is currently unavailable.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "top-right"
+      });
     } finally {
       setLoading(false);
-      setInputCode(''); // Clear the input field after sending
+      setInputCode('');
     }
   };
 
@@ -69,21 +87,31 @@ export default function Chat() {
       pt={{ base: '70px', md: '0px', '2xl': '80px' }}
       direction="column"
       position="relative"
+      minH="100vh"
     >
       <Flex
         direction="column"
         mx="auto"
-        w={{ base: '100%', md: '100%', xl: '100%' }}
-        minH={{ base: '75vh', '2xl': '85vh' }}
+        w="100%"
         maxW="1000px"
+        px="20px"
+        position="relative"
       >
         {/* Messages Display */}
-        <Box overflowY="auto" maxH="500px" w="100%" mb="20px">
+        <Box
+          overflowY="auto"
+          maxH="calc(100vh - 250px)"  // Adjust for input height
+          w="100%"
+          mb="20px"
+          pb="120px"  // Add space for input
+        >
           {messages.map((msg, index) => (
             <Flex
               key={index}
               justify={msg.type === 'user' ? 'flex-end' : 'flex-start'}
               mb="10px"
+              w="100%"
+              pr={msg.type === 'user' ? '150px' : '0'} // Add 100px padding for user messages
             >
               <Flex
                 direction="row"
@@ -118,7 +146,15 @@ export default function Chat() {
         </Box>
 
         {/* Chat Input */}
-        <Flex mt="20px">
+        <Flex
+          position="fixed"
+          bottom="100px"
+          left="50%"
+          transform="translateX(-50%)"
+          width="100%"
+          maxW="960px"
+          zIndex={2}
+        >
           <Input
             minH="54px"
             h="100%"
@@ -130,17 +166,25 @@ export default function Chat() {
             fontSize="sm"
             fontWeight="500"
             color={inputColor}
+            bg={useColorModeValue('white', 'gray.800')} // Added bg here
             _placeholder={placeholderColor}
             placeholder="Type your question here..."
             value={inputCode}
             onChange={(e) => setInputCode(e.target.value)}
+            onKeyDown={handleKeyDown}
+            disabled={loading}
           />
           <Button
-            color={'white'}
+            variant="solid"
+            minH="54px"
+            color="white"
             fontSize="sm"
+            fontWeight="500"
             borderRadius="45px"
+            px="24px"
             bg="linear-gradient(15.46deg, #6C63FF 26.3%, #3F37C9 86.4%)"
             _hover={{
+              bg: "linear-gradient(15.46deg, #5B52FF 26.3%, #2E26B8 86.4%)",
               boxShadow: '0px 10px 20px rgba(60, 50, 200, 0.4)',
             }}
             onClick={handleTranslate}

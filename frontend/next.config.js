@@ -15,6 +15,7 @@ const nextConfig = {
       'images.unsplash.com',
       'scontent.fotp8-1.fna.fbcdn.net',
       'i.ibb.co',
+      'localhost',
     ],
     // Make ENV
     unoptimized: true,

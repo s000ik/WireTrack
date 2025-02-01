@@ -1,26 +1,16 @@
 'use client';
 
-
-// Chakra imports
 import { Box, Grid } from '@chakra-ui/react';
 import AdminLayout from 'layouts/admin';
-
-// Custom components
 import Banner from 'views/admin/profile/components/Banner';
-import General from 'views/admin/profile/components/General';
-import Notifications from 'views/admin/profile/components/Notifications';
-import Projects from 'views/admin/profile/components/Projects';
-import Storage from 'views/admin/profile/components/Storage';
-import Upload from 'views/admin/profile/components/Upload';
+import Image from 'next/image';
 
 // Assets
-import banner from 'img/auth/banner.png';
-import avatar from 'img/avatars/avatar9.png';
-
+const banner = '/img/auth/banner.png';
+const avatar = process.env.NEXT_PUBLIC_URL + '/img/avatars/satwiksingh.jpg' || '/img/avatars/satwiksingh.jpg';
 export default function ProfileOverview() {
   return (
-    <Box pt={{ base: '130px', md: '80px', xl: '80px' }}>
-      {/* Main Fields */}
+    <Box pt={{ base: '130px', md: '80px', xl: '80px' }} w="100%">
       <Grid
         templateColumns={{
           base: '1fr',
@@ -31,19 +21,19 @@ export default function ProfileOverview() {
           lg: '1fr',
         }}
         gap={{ base: '20px', xl: '20px' }}
+        w="100%"
       >
-        </Grid>
         <Banner
-          gridArea="1 / 1 / 2 / 2"
+          gridArea="1 / 1 / 2 / -1"  // Span all columns
           banner={banner}
           avatar={avatar}
-          name="Sanskarkumar Prasad"
+          name="Satwik Singh"
           job="Senior Operator"
           posts="174S3DS"
           followers="4"
           following="3"
         />
-        
+      </Grid>
     </Box>
   );
 }
