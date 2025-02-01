@@ -16,6 +16,7 @@ import {
   Switch,
   Flex,
 } from '@chakra-ui/react';
+import Card from 'components/card/Card';
 import { useState, useCallback, useEffect, ChangeEvent } from 'react';
 import CheckTable from 'views/admin/default/components/CheckTable';
 import * as XLSX from 'xlsx';
@@ -37,9 +38,12 @@ interface TableData {
 
 
 export default function PredictionForm() {
-  const brandColor = useColorModeValue('brand.500', 'white');
-  const boxBg = useColorModeValue('white', 'gray.700');
   const toast = useToast();
+  const textColorPrimary = useColorModeValue('brand.500', 'white');
+  const textColorSecondary = 'gray.400';
+  const boxBg = useColorModeValue('secondaryGray.300', 'gray.700');
+  const brandColor = useColorModeValue('brand.500', 'white');
+
 
   const [values, setValues] = useState<FormValues>({
     elongation: '',
@@ -172,106 +176,136 @@ export default function PredictionForm() {
   };
 
   return (
-    <Box pt={{ base: '130px', md: '80px', xl: '100px' }}>
-      <HStack spacing="20px" align="start">
-        <SimpleGrid
-          columns={{ base: 1, md: 2, lg: 3 }}
-          width="1700px"
-          gap="40px"
-          mb="20px"
-        >
-          <Box bg={boxBg} p="20px" borderRadius="20px" shadow="none">
-            <FormControl>
-              <InputGroup>
+    <Box pt={{ base: '130px', md: '80px', xl: '80px' }}>
+      <Card mb={{ base: '0px', lg: '20px' }} alignItems="center">
+        {/* Banner background similar to profile page */}
+        <Box
+          bgImage="/img/auth/banner.png"
+          bgSize="cover"
+          borderRadius="16px"
+          h="131px"
+          w="100%"
+        />
+
+        <Box w="100%" mt="-40px">
+          <SimpleGrid
+            columns={{ base: 1, md: 3 }}
+            gap="20px"
+            mb="20px"
+            mx="auto"
+            px="20px"
+          >
+            <FormControl bg={boxBg} p="16px" borderRadius="16px">
+              <Text color={textColorSecondary} fontSize="sm" mb="4px">
+                Ultimate Tensile Strength
+              </Text>
+              <InputGroup size="md">
                 <Input
+                  variant="main"
                   name="uts"
                   value={values.uts}
                   onChange={handleInputChange}
                   type="number"
-                  placeholder="Enter Desired UTS"
+                  placeholder="Enter UTS"
+                  fontSize="sm"
                 />
-                <InputRightAddon>MPa</InputRightAddon>
+                <InputRightAddon children="MPa" bg={boxBg} color={textColorSecondary} />
               </InputGroup>
             </FormControl>
-          </Box>
 
-          <Box bg={boxBg} p="20px" borderRadius="20px" shadow="none">
-            <FormControl>
-              <InputGroup>
+            <FormControl bg={boxBg} p="16px" borderRadius="16px">
+              <Text color={textColorSecondary} fontSize="sm" mb="4px">
+                Elongation
+              </Text>
+              <InputGroup size="md">
                 <Input
+                  variant="main"
                   name="elongation"
                   value={values.elongation}
                   onChange={handleInputChange}
                   type="number"
-                  placeholder="Enter Desired Elongation"
+                  placeholder="Enter Elongation"
+                  fontSize="sm"
                 />
-                <InputRightAddon>%</InputRightAddon>
+                <InputRightAddon children="%" bg={boxBg} color={textColorSecondary} />
               </InputGroup>
             </FormControl>
-          </Box>
 
-          <Box bg={boxBg} p="20px" borderRadius="20px" shadow="none">
-            <FormControl>
-              <InputGroup>
+            <FormControl bg={boxBg} p="16px" borderRadius="16px">
+              <Text color={textColorSecondary} fontSize="sm" mb="4px">
+                Conductivity
+              </Text>
+              <InputGroup size="md">
                 <Input
+                  variant="main"
                   name="conductivity"
                   value={values.conductivity}
                   onChange={handleInputChange}
                   type="number"
-                  placeholder="Enter Desired Conductivity"
+                  placeholder="Enter Conductivity"
+                  fontSize="sm"
                 />
-                <InputRightAddon>S/m</InputRightAddon>
+                <InputRightAddon children="S/m" bg={boxBg} color={textColorSecondary} />
               </InputGroup>
             </FormControl>
-          </Box>
-        </SimpleGrid>
-      </HStack>
+          </SimpleGrid>
 
-      <Box display="flex" justifyContent="center" alignItems="center" mt="10px">
-        <Button
-          colorScheme="brand"
-          onClick={handleSubmit}
-          mt="12px"
-          h="60px"
-          w="140px"
-          borderRadius="100px"
-          isLoading={loading}
-        >
-          Calculate
-        </Button>
-      </Box>
+          <Flex direction="column" align="center" px="20px" mb="20px">
+            <Button
+              variant="brand"
+              onClick={handleSubmit}
+              minH="46px"
+              w={{ base: "100%", md: "200px" }}
+              fontSize="sm"
+              fontWeight="500"
+              isLoading={loading}
+              mb="12px"
+            >
+              Calculate
+            </Button>
 
-      <HStack mt="10px" alignItems="center" justifyContent="center">
-        <Text>Real-Time Prediction</Text>
-        <Switch
-          isChecked={isRealTimePredictionEnabled}
-          onChange={() => setIsRealTimePredictionEnabled((prev) => !prev)}
-        />
-      </HStack>
+            <HStack spacing="12px" align="center">
+              <Text color={textColorSecondary} fontSize="sm">
+                Real-Time Prediction
+              </Text>
+              <Switch
+                colorScheme="brand"
+                isChecked={isRealTimePredictionEnabled}
+                onChange={() => setIsRealTimePredictionEnabled((prev) => !prev)}
+              />
+            </HStack>
+          </Flex>
 
-      {loading && (
-        <Flex direction="column" justify="center" align="center" mt="20px">
-          <Spinner size="xl" />
-          <Text ml="4" mt="4">
-            Loading data...
-          </Text>
-        </Flex>
-      )}
+          {loading && (
+            <Flex direction="column" justify="center" align="center" my="20px">
+              <Spinner size="xl" color={brandColor} />
+              <Text color={textColorSecondary} fontSize="sm" mt="4">
+                Loading data...
+              </Text>
+            </Flex>
+          )}
 
-      {tableData.length > 0 && (
-        <VStack mt="20px" bg={boxBg} p="10px" borderRadius="md">
-          <CheckTable tableData={tableData} />
-          <Button colorScheme="blue" onClick={handleDownload} mt="4">
-            Download Excel
-          </Button>
-        </VStack>
-      )}
+          {tableData.length > 0 && (
+            <Card bg={boxBg} mx="20px" mb="20px" p="20px">
+              <CheckTable tableData={tableData} />
+              <Button
+                variant="brand"
+                onClick={handleDownload}
+                mt="4"
+                w={{ base: "100%", md: "auto" }}
+              >
+                Download Excel
+              </Button>
+            </Card>
+          )}
 
-      {error && (
-        <Text color="red.500" mt="4" textAlign="center">
-          {error}
-        </Text>
-      )}
+          {error && (
+            <Text color="red.500" fontSize="sm" mt="4" textAlign="center">
+              {error}
+            </Text>
+          )}
+        </Box>
+      </Card>
     </Box>
   );
 }

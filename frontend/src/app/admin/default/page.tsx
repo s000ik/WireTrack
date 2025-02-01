@@ -178,15 +178,6 @@ export default function Default() {
         <SimpleGrid columns={{ base: 1, md: 2, xl: 1 }} gap="20px">
           <WeeklyRevenue />
         </SimpleGrid>
-        <SwitchField
-          reversed={true}
-          fontSize="sm"
-          mb="20px"
-          id="2"
-          label="Real Time Monitoring"
-          isChecked={isRealTimePredictionEnabled}
-          onChange={() => setIsRealTimePredictionEnabled((prev) => !prev)}
-        />
       </SimpleGrid>
     </Box>
   );

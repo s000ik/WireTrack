@@ -37,7 +37,7 @@ export default function Footer() {
         {' '}
         &copy; {new Date().getFullYear()}
         <Text as="span" fontWeight="500" ms="4px">
-          WireTrack. All Rights Reserved. Made with love by
+          WireTrack. Made with love by Satwik Singh and Team Mad Astra. Implemented at 
           <Link
             mx="3px"
             color={textColor}
@@ -45,7 +45,7 @@ export default function Footer() {
             target="_blank"
             fontWeight="700"
           >
-            Mad Astra
+            Nalco India
           </Link>
         </Text>
       </Text>

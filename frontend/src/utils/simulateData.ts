@@ -6,14 +6,14 @@ interface ProcessParameters {
 
 // Base values and ranges from existing data
 export const baseValues = {
-    uts: 11.0,         // Base ~10.0 MPa
-    elongation: 12.0,  // Base ~18.0%
+    uts: 10.0,         // Base ~10.0 MPa
+    elongation: 18.0,  // Base ~18.0%
     conductivity: 61.3 // Base ~61.3 S/m
 };
 
 const ranges = {
-    uts: { min: 10.5, max: 11.8 },        // ±0.5 range
-    elongation: { min: 10.0, max: 14.0 }, // Wider range observed
+    uts: { min: 9.5, max: 10.5 },        // ±0.5 range
+    elongation: { min: 15.0, max: 22.0 }, // Wider range observed
     conductivity: { min: 61.0, max: 61.6 } // Tight range
 };
 

@@ -1,8 +1,8 @@
 'use client';
-/* eslint-disable */
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
+  Fade,
   Flex,
   Input,
   Button,
@@ -14,106 +14,187 @@ import {
   AlertTitle,
   AlertDescription,
   CloseButton,
+  FormControl,
+  SimpleGrid,
 } from '@chakra-ui/react';
-
+import Card from 'components/card/Card';
+interface AlertData {
+  port: string;
+  millId: string;
+}
 export default function PortControl() {
-  // Initial port and mill state
-  const [portNumber, setPortNumber] = useState<string>('1137');
-  const [millId, setMillId] = useState<string>('7');
+  const [currentPort, setCurrentPort] = useState<string>('1137');
+  const [currentMillId, setCurrentMillId] = useState<string>('7');
+  const [formPort, setFormPort] = useState<string>('1137');
+  const [formMillId, setFormMillId] = useState<string>('7');
   const [showAlert, setShowAlert] = useState<boolean>(false);
+  const [alertData, setAlertData] = useState<AlertData | null>(null);
 
-  // Colors for theme
-  const borderColor = useColorModeValue('gray.200', 'whiteAlpha.200');
-  const inputColor = useColorModeValue('navy.700', 'white');
+  useEffect(() => {
+    if (showAlert) {
+      const timer = setTimeout(() => {
+        setShowAlert(false);
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [showAlert]);
+  // Colors from your theme
   const textColor = useColorModeValue('navy.700', 'white');
-  const placeholderColor = useColorModeValue(
-    { color: 'gray.500' },
-    { color: 'whiteAlpha.600' }
-  );
+  const brandColor = useColorModeValue('brand.500', 'white');
+  const borderColor = useColorModeValue('secondaryGray.400', 'whiteAlpha.200');
+  const boxBg = useColorModeValue('secondaryGray.300', 'whiteAlpha.100');
 
   const handleFormSubmit = () => {
-    if (!portNumber || !millId) {
+    if (!formPort || !formMillId) {
       alert('Please provide both port number and mill ID.');
       return;
     }
-    // Update the displayed current port and mill ID values
+    
+    // Update display values
+    setCurrentPort(formPort);
+    setCurrentMillId(formMillId);
+    
+    // Set alert data with new values
+    setAlertData({ port: formPort, millId: formMillId });
     setShowAlert(true);
   };
 
   return (
-    <Flex
-      w={{ base: '100%', md: '100%', xl: '100%' }} // Keep only one width declaration
-      pt={{ base: '70px', md: '0px', '2xl': '80px' }}
-      direction="column"
-      position="relative"
-      mx="auto"
-      minH={{ base: '75vh', '2xl': '85vh' }}
-      maxW="1000px"
-    >
-      {/* Current Port and Mill ID */}
-      <Box mb="20px">
-        <Text fontSize="lg" fontWeight="bold">
-          Current Port: {portNumber || 'Not set'}
-        </Text>
-        <Text fontSize="lg" fontWeight="bold">
-          Current Mill ID: {millId || 'Not set'}
-        </Text>
-      </Box>
-
-      {/* Port and Mill ID Form */}
-      <Flex direction="column" mt="20px">
-        <Input
-          placeholder="Enter Port Number"
-          value={portNumber}
-          onChange={(e) => setPortNumber(e.target.value)}
-          mb="10px"
-          fontSize="sm"
-          borderColor={borderColor}
-          borderRadius="45px"
-          p="15px"
-        />
-        <Input
-          placeholder="Enter Mill ID"
-          value={millId}
-          onChange={(e) => setMillId(e.target.value)}
-          mb="10px"
-          fontSize="sm"
-          borderColor={borderColor}
-          borderRadius="45px"
-          p="15px"
-        />
-        <Button
-          color={'white'}
-          fontSize="sm"
-          borderRadius="45px"
-          bg="linear-gradient(15.46deg, #6C63FF 26.3%, #3F37C9 86.4%)"
-          _hover={{
-            boxShadow: '0px 10px 20px rgba(60, 50, 200, 0.4)',
-          }}
-          onClick={handleFormSubmit}
+    <Box pt={{ base: '130px', md: '80px', xl: '80px' }}>
+      <Card mb={{ base: '0px', lg: '20px' }} alignItems="center">
+        {/* Banner background similar to profile page */}
+        <Box
+          bgImage="/img/dashboards/Debit.png" // New network-themed image
+          bgSize="cover"
+          bgPosition="center"
+          borderRadius="16px"
+          h="131px"
+          w="100%"
+          position="relative"
         >
-          Update Port & Mill ID
-        </Button>
-      </Flex>
-
-      {/* Alert Display */}
-      {showAlert && (
-        <Alert status="success" mt="20px">
-          <AlertIcon />
-          <Box flex="1">
-            <AlertTitle>Port and Mill ID Updated!</AlertTitle>
-            <AlertDescription display="block">
-              The current port is now {portNumber} and the mill ID is {millId}.
-            </AlertDescription>
-          </Box>
-          <CloseButton
+          <Flex 
             position="absolute"
-            right="8px"
-            top="8px"
-            onClick={() => setShowAlert(false)}
-          />
-        </Alert>
-      )}
-    </Flex>
+            top="0"
+            bottom="0"
+            left="0"
+            right="0"
+            align="center"
+            justify="center"
+            bg="blackAlpha.300" // Dark overlay for better text visibility
+            borderRadius="16px"
+          >
+            <Text
+              color="white"
+              fontSize="3xl"
+              fontWeight="bold"
+              textShadow="0px 2px 4px rgba(0, 0, 0, 0.25)"
+            >
+              Port Control
+            </Text>
+          </Flex>
+        </Box>
+
+        <Box w="100%" mt="20px">
+          <Flex direction="column" p="20px">
+            {/* Current Settings Display */}
+            <Flex 
+              bg={boxBg} 
+              p="16px" 
+              borderRadius="16px" 
+              mb="20px"
+              direction="column"
+            >
+              <Text color={textColor} fontSize="lg" fontWeight="700" mb="16px">
+                Current Configuration
+              </Text>
+              <SimpleGrid columns={2} spacing={8}>
+                <Box>
+                  <Text color={textColor} fontSize="xs" textTransform="uppercase" mb="4px">
+                    Port Number
+                  </Text>
+                  <Text color={brandColor} fontSize="md" fontWeight="500">
+      {currentPort || 'Not set'}
+    </Text>
+                </Box>
+                <Box>
+                  <Text color={textColor} fontSize="xs" textTransform="uppercase" mb="4px">
+                    Mill ID
+                  </Text>
+                  <Text color={brandColor} fontSize="md" fontWeight="500">
+      {currentMillId || 'Not set'}
+    </Text>
+                </Box>
+              </SimpleGrid>
+            </Flex>
+
+            <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6} mb="24px">
+              <FormControl>
+                <Text color={textColor} fontSize="sm" fontWeight="600" mb="8px">
+                  Port Number
+                </Text>
+                <Input
+                  variant="main"
+                  placeholder="Enter Port Number"
+                  value={formPort}
+      onChange={(e) => setFormPort(e.target.value)}
+                  fontSize="sm"
+                  bg="white"
+                  borderColor={borderColor}
+                  _focus={{ borderColor: brandColor }}
+                />
+              </FormControl>
+              <FormControl>
+                <Text color={textColor} fontSize="sm" fontWeight="600" mb="8px">
+                  Mill ID
+                </Text>
+                <Input
+                  variant="main"
+                  placeholder="Enter Mill ID"
+                  value={formMillId}
+      onChange={(e) => setFormMillId(e.target.value)}
+                  fontSize="sm"
+                  bg="white"
+                  borderColor={borderColor}
+                  _focus={{ borderColor: brandColor }}
+                />
+              </FormControl>
+            </SimpleGrid>
+
+            <Button
+              variant="brand"
+              fontSize="sm"
+              fontWeight="500"
+              w={{ base: "100%", md: "200px" }}
+              h="50px"
+              mx="auto"
+              onClick={handleFormSubmit}
+            >
+              Update Settings
+            </Button>
+
+            {/* Alert */}
+            {showAlert && (
+  <Fade in={showAlert}>
+    <Alert status="success" borderRadius="16px" mt="20px">
+      <AlertIcon />
+      <Box flex="1">
+        <AlertTitle>Settings Updated!</AlertTitle>
+        <AlertDescription display="block">
+          Port: {alertData?.port}, Mill ID: {alertData?.millId}
+        </AlertDescription>
+      </Box>
+      <CloseButton
+        position="absolute"
+        right="8px"
+        top="8px"
+        onClick={() => setShowAlert(false)}
+      />
+    </Alert>
+  </Fade>
+)}
+          </Flex>
+        </Box>
+      </Card>
+    </Box>
   );
 }

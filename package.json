@@ -2,5 +2,10 @@
   "dependencies": {
     "react-d3-speedometer": "^2.2.1",
     "xlsx": "^0.18.5"
+  },
+  "scripts": {
+    "lint": "eslint . --ext .ts,.tsx",
+    "lint:fix": "eslint . --ext .ts,.tsx --fix",
+    "format": "prettier --write \"src/**/*.{ts,tsx}\""
   }
 }
