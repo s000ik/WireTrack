@@ -89,6 +89,23 @@ export default function Chat() {
       position="relative"
       minH="100vh"
     >
+         {/* Background Icon */}
+    <Flex
+      position="fixed"
+      top="50%"
+      left="50%"
+      transform="translate(-50%, -50%)"
+      opacity={0.1}
+      zIndex={0}
+      pointerEvents="none"
+    >
+      <Icon
+        as={MdAutoAwesome}
+        width="400px"
+        height="400px"
+        color="gray.400"
+      />
+    </Flex>
       <Flex
         direction="column"
         mx="auto"
