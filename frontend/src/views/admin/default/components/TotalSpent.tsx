@@ -2,9 +2,16 @@ import { Box, Button, Flex, Icon, Text, useColorModeValue } from '@chakra-ui/rea
 import Card from 'components/card/Card';
 import LineChart from 'components/charts/LineChart';
 import { useEffect, useState } from 'react';
+
+interface ProcessParameters {
+  uts: number;
+  elongation: number;
+  conductivity: number;
+}
 import { MdOutlineCalendarToday } from 'react-icons/md';
 import { IoCheckmarkCircle } from 'react-icons/io5';
 import { getLineChartOptions } from 'variables/charts';
+import { baseValues, generateProcessData } from 'utils/simulateData';
 
 export default function TotalSpent(props: { parameter: string }) {
   const { parameter, ...rest } = props;
@@ -17,6 +24,12 @@ export default function TotalSpent(props: { parameter: string }) {
   // States for fetched values
   const [chartData, setChartData] = useState<any[]>([]);
   const [lastValues, setLastValues] = useState<any[]>([]);
+  
+  const [currentValues, setCurrentValues] = useState<ProcessParameters>({
+    uts: baseValues.uts,
+    elongation: baseValues.elongation,
+    conductivity: baseValues.conductivity
+  });
 
   // Fetch API data every 15 seconds
   useEffect(() => {
@@ -53,6 +66,31 @@ export default function TotalSpent(props: { parameter: string }) {
 
     return () => clearInterval(interval); // Cleanup on component unmount
   }, [parameter, chartData]); // Only re-run when parameter changes
+
+  useEffect(() => {
+    // Update every 5 seconds
+    const interval = setInterval(() => {
+      const newValues = generateProcessData(currentValues);
+      setCurrentValues(newValues);
+      
+      // Add new data point
+      const newData = {
+        Coil_No: `Coil ${(chartData.length + 1).toString().padStart(3, '0')}`,
+        [parameter]: newValues[parameter.toLowerCase() as keyof ProcessParameters]
+      };
+
+      // Update chart keeping last 20 points
+      const updatedData = [...chartData, newData].slice(-20);
+      setChartData(updatedData);
+
+      // Update last values display
+      const startIndex = updatedData.length > 5 ? updatedData.length - 5 : 0;
+      setLastValues(updatedData.slice(startIndex));
+
+    }, 3000); // 5 second updates
+
+    return () => clearInterval(interval);
+  }, [parameter, chartData, currentValues]);
 
   // Calculate rolling average for the last 5 values
   const calculateRollingAverage = (data: any[], parameter: string, windowSize: number) => {
