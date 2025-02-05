@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@vercel/analytics": "^1.4.1",
     "react-d3-speedometer": "^2.2.1",
     "xlsx": "^0.18.5"
   },
